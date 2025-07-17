@@ -19,13 +19,20 @@ class Prt_Manual_Widgets
 
     function register_widgets()
     {
-        // register_block_type
+        // #1 register_block_type
         register_block_type('prtmanualwidget/static-widget', [
             'render_callback' => [$this, 'register_static_widget'],
             // 'attributes' => []
         ]);
 
-
+        // #2 register semi dynamic widget
+        register_block_type('prtmanualwidget/message-widget', [
+            'render_callback' => [$this, 'register_message_widget'],
+            'attributes' => [
+                'title' => ['type' => 'string', 'default' => 'Title'],
+                'message' => ['type' => 'string', 'default' => "Hello World"]
+            ]
+        ]);
     }
 
     function register_static_widget($attributes, $content)
@@ -36,6 +43,32 @@ class Prt_Manual_Widgets
 
         $output .= "</div>";
         return $output;
+
+
+        // ob_start();
+        //
+        // <div>Static message bo</div>
+        // <?php return ob_get_clean();
+    }
+
+    // #register semi dynamic widget
+    function register_message_widget($attributes, $content)
+    {
+
+        $title = $attributes['title'];
+        $message = $attributes['message'];
+
+        ob_start();
+        ?>
+        <div>
+            <h3> <?php echo esc_html($title); ?> </h3>
+            <p>
+                <?php
+                echo esc_html($message);
+                ?>
+            </p>
+        </div>
+        <?php return ob_get_clean();
     }
 
 
